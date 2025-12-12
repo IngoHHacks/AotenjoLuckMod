@@ -1,0 +1,70 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>LuckMod</AssemblyName>
+    <AssemblyVersion>1.0.0</AssemblyVersion>
+    <ReleaseVersion>1.0.0</ReleaseVersion>
+    <TargetFramework>net4.7.2</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DebugType>full</DebugType>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <OutputPath>bin\</OutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="lib\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="APIPlus">
+      <HintPath>lib\APIPlus.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>lib\Assembly-CSharp_public.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.TextMeshPro">
+      <HintPath>lib\Unity.TextMeshPro.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>lib\UnityEngine.UI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="HarmonyLoaderAotenjo">
+      <HintPath>lib\HarmonyLoaderAotenjo.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="HarmonyX" Version="2.16.0" IncludeAssets="compile" />
+    <PackageReference Include="UnityEngine.Modules" Version="2022.3.60" IncludeAssets="compile" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <!-- Change this to the correct folder of your game if necessary -->
+    <ModPath>C:\Program Files (x86)\Steam\steamapps\common\Aotenjo\Aotenjo_Data\StreamingAssets\mods\luck_mod\</ModPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="Assets\**" Recursive="true" />
+  </ItemGroup>
+
+  <Target Name="PackageAssets" AfterTargets="Build">
+    <Copy SourceFiles="@(Content)" DestinationFolder="$(OutputPath)%(RecursiveDir)" SkipUnchangedFiles="true" />
+    <MakeDir Directories="$(OutputPath).harmonyloader" />
+    <Move SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFiles="$(OutputPath)harmony\$(AssemblyName).dll" />
+    <Delete Files="$(OutputPath)$(AssemblyName).pdb" ContinueOnError="true" />
+  </Target>
+
+  <Target Name="PostBuild" AfterTargets="Build" DependsOnTargets="PackageAssets" Condition="'$(ModPath)' != '' And '$(Configuration)' == 'Release and Copy to Mod Folder'">
+    <ItemGroup>
+      <OutputPath Include="$(OutputPath)**" Recursive="true" />
+    </ItemGroup>
+    <MakeDir Directories="$(ModPath)" />
+    <Copy SourceFiles="@(OutputPath)" DestinationFolder="$(ModPath)%(RecursiveDir)" SkipUnchangedFiles="true" />
+  </Target>
+</Project>

@@ -1,0 +1,14 @@
+﻿global using System;
+global using System.Collections.Generic;
+global using System.Linq;
+global using System.Text;
+global using System.Threading.Tasks;
+global using UnityEngine;
+global using UnityEngine.UI;
+global using HarmonyLib;
+global using System.IO;
+global using Aotenjo;
+global using Logger = Aotenjo.Logger;
+global using HarmonyLoaderAotenjo;
+global using AotenjoAPIPlus;
+global using static AotenjoAPIPlus.Localization.LocalizationManager;
